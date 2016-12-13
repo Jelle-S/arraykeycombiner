@@ -1,6 +1,8 @@
 <?php
 
-namespace Jelle_S\CssOptimizer\Util;
+namespace Jelle_S\Util\Combiner;
+
+use Jelle_S\Util\Intersections\ArrayIntersections;
 
 /**
  * Combines arrays by searching for intersections and adding them to the master
@@ -119,7 +121,7 @@ class ArrayKeyCombiner {
     if (count($arrays) > 1) {
       do {
         $changed = FALSE;
-        $i = new Intersections($arrays, $this->threshold, $this->intersectionIterationsLimit);
+        $i = new ArrayIntersections($arrays, $this->threshold, $this->intersectionIterationsLimit);
         $intersections = $i->getAll();
         if ($intersections) {
           foreach ($intersections as $intersection) {
