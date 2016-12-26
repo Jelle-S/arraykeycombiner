@@ -171,7 +171,7 @@ class ArrayKeyCombiner {
       foreach ($keys as $key => $arr) {
         $keys_to_merge = [];
         $serialized_val = serialize($arr);
-        while ($key_to_merge = array_search($serialized_val, $serialized)) {
+        while (($key_to_merge = array_search($serialized_val, $serialized)) !== FALSE) {
           $keys_to_merge[] = $key_to_merge;
           unset($serialized[$key_to_merge]);
         }
