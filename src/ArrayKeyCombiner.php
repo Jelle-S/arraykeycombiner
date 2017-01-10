@@ -86,10 +86,9 @@ class ArrayKeyCombiner {
     foreach ($this->groupedArrays as $size => $arrays) {
       if ($size >= $this->threshold) {
         $masterArray += $arrays;
+        continue;
       }
-      else {
-        $leftovers += $arrays;
-      }
+      $leftovers += $arrays;
     }
     return $this->combineIdentical($this->combineArrays($masterArray) + $leftovers);
   }
@@ -169,16 +168,16 @@ class ArrayKeyCombiner {
     if (count($unique) !== count($arrays)) {
       $keys = array_diff_key($arrays, $unique);
       foreach ($keys as $key => $arr) {
-        $keys_to_merge = [];
-        $serialized_val = serialize($arr);
-        while (($key_to_merge = array_search($serialized_val, $serialized)) !== FALSE) {
-          $keys_to_merge[] = $key_to_merge;
-          unset($serialized[$key_to_merge]);
+        $keysToMerge = [];
+        $serializedVal = serialize($arr);
+        while (($keyToMerge = array_search($serializedVal, $serialized)) !== FALSE) {
+          $keysToMerge[] = $keyToMerge;
+          unset($serialized[$keyToMerge]);
         }
-        if (count($keys_to_merge) > 1) {
-          foreach ($keys_to_merge as $key_to_merge) {
-            unset($arrays[$key_to_merge]);
-            $arrays[implode($this->keyDelimiter, $keys_to_merge)] = $arr;
+        if (count($keysToMerge) > 1) {
+          foreach ($keysToMerge as $keyToMerge) {
+            unset($arrays[$keyToMerge]);
+            $arrays[implode($this->keyDelimiter, $keysToMerge)] = $arr;
           }
         }
       }
