@@ -121,34 +121,50 @@ class ArrayKeyCombiner {
       return $arrays;
     }
     do {
-      $changed = FALSE;
       $i = new ArrayIntersections($arrays, $this->threshold, $this->intersectionIterationsLimit);
       $intersections = $i->getAll();
       if (!$intersections) {
         break;
       }
-      foreach ($intersections as $intersection) {
-        $size = count($intersection);
-        $keys = [];
-        foreach ($arrays as $key => $arr) {
-          if (count(array_intersect_assoc($arr, $intersection)) !== $size) {
-            continue;
-          }
-          $arrays[$key] = array_diff_key($arr, $intersection);
-          if (empty($arrays[$key])) {
-            unset($arrays[$key]);
-          }
-          $keys[] = $key;
-        }
-        if ($keys) {
-          sort($keys);
-          $arrays[implode($this->keyDelimiter, array_unique($keys))] = $intersection;
-          $changed = TRUE;
-        }
-      }
+      $changed = $this->combineIntersections($arrays, $intersections);
     } while ($changed && count($arrays) > 1);
 
     return $this->combineIdentical($arrays);
+  }
+
+  /**
+   * Combines intersections of arrays into the arrays.
+   *
+   * @param array $arrays
+   *   The arrays of which the intersections were found.
+   * @param array $intersections
+   *   The intersections that were found.
+   *
+   * @return bool
+   *   Whether or not the arrays have changed.
+   */
+  protected function combineIntersections(&$arrays, $intersections) {
+    $changed = FALSE;
+    foreach ($intersections as $intersection) {
+      $size = count($intersection);
+      $keys = [];
+      foreach ($arrays as $key => $arr) {
+        if (count(array_intersect_assoc($arr, $intersection)) !== $size) {
+          continue;
+        }
+        $arrays[$key] = array_diff_key($arr, $intersection);
+        if (empty($arrays[$key])) {
+          unset($arrays[$key]);
+        }
+        $keys[] = $key;
+      }
+      if ($keys) {
+        sort($keys);
+        $arrays[implode($this->keyDelimiter, array_unique($keys))] = $intersection;
+        $changed = TRUE;
+      }
+    }
+    return $changed;
   }
 
   /**
