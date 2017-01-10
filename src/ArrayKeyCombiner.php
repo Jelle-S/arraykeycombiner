@@ -117,36 +117,38 @@ class ArrayKeyCombiner {
    *   The altered master array with the combined arrays added.
    */
   protected function combineArrays($arrays) {
-    if (count($arrays) > 1) {
-      do {
-        $changed = FALSE;
-        $i = new ArrayIntersections($arrays, $this->threshold, $this->intersectionIterationsLimit);
-        $intersections = $i->getAll();
-        if ($intersections) {
-          foreach ($intersections as $intersection) {
-            $size = count($intersection);
-            $keys = [];
-            foreach ($arrays as $key => $arr) {
-              if (count(array_intersect_assoc($arr, $intersection)) === $size) {
-                $arrays[$key] = array_diff_key($arr, $intersection);
-                if (empty($arrays[$key])) {
-                  unset($arrays[$key]);
-                }
-                $keys[] = $key;
-              }
-            }
-            if ($keys) {
-              sort($keys);
-              $arrays[implode($this->keyDelimiter, array_unique($keys))] = $intersection;
-              $changed = TRUE;
-            }
-          }
-        }
-      } while ($changed && count($arrays) > 1);
-
-      $arrays = $this->combineIdentical($arrays);
+    if (count($arrays) <= 1) {
+      return $arrays;
     }
-    return $arrays;
+    do {
+      $changed = FALSE;
+      $i = new ArrayIntersections($arrays, $this->threshold, $this->intersectionIterationsLimit);
+      $intersections = $i->getAll();
+      if (!$intersections) {
+        break;
+      }
+      foreach ($intersections as $intersection) {
+        $size = count($intersection);
+        $keys = [];
+        foreach ($arrays as $key => $arr) {
+          if (count(array_intersect_assoc($arr, $intersection)) !== $size) {
+            continue;
+          }
+          $arrays[$key] = array_diff_key($arr, $intersection);
+          if (empty($arrays[$key])) {
+            unset($arrays[$key]);
+          }
+          $keys[] = $key;
+        }
+        if ($keys) {
+          sort($keys);
+          $arrays[implode($this->keyDelimiter, array_unique($keys))] = $intersection;
+          $changed = TRUE;
+        }
+      }
+    } while ($changed && count($arrays) > 1);
+
+    return $this->combineIdentical($arrays);
   }
 
   /**
@@ -167,7 +169,7 @@ class ArrayKeyCombiner {
     $unique = array_intersect_key($arrays, array_unique($serialized));
     if (count($unique) !== count($arrays)) {
       $keys = array_diff_key($arrays, $unique);
-      foreach ($keys as $key => $arr) {
+      foreach ($keys as $arr) {
         $keysToMerge = [];
         $serializedVal = serialize($arr);
         while (($keyToMerge = array_search($serializedVal, $serialized)) !== FALSE) {
