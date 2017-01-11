@@ -1,6 +1,6 @@
 # ArrayKeyCombiner
 
-[![Build Status](https://travis-ci.org/Jelle-S/arraykeycombiner.svg?branch=master)](https://travis-ci.org/Jelle-S/arraykeycombiner) [![Code Climate](https://codeclimate.com/github/Jelle-S/arraykeycombiner/badges/gpa.svg)](https://codeclimate.com/github/Jelle-S/arraykeycombiner) [![Test Coverage](https://codeclimate.com/github/Jelle-S/arraykeycombiner/badges/coverage.svg)](https://codeclimate.com/github/Jelle-S/arraykeycombiner/coverage) [![Issue Count](https://codeclimate.com/github/Jelle-S/arraykeycombiner/badges/issue_count.svg)](https://codeclimate.com/github/Jelle-S/arraykeycombiner)
+[![Build Status](https://travis-ci.org/Jelle-S/arraykeycombiner.svg?branch=develop)](https://travis-ci.org/Jelle-S/arraykeycombiner) [![Code Climate](https://codeclimate.com/github/Jelle-S/arraykeycombiner/badges/gpa.svg)](https://codeclimate.com/github/Jelle-S/arraykeycombiner) [![Test Coverage](https://codeclimate.com/github/Jelle-S/arraykeycombiner/badges/coverage.svg)](https://codeclimate.com/github/Jelle-S/arraykeycombiner/coverage) [![Issue Count](https://codeclimate.com/github/Jelle-S/arraykeycombiner/badges/issue_count.svg)](https://codeclimate.com/github/Jelle-S/arraykeycombiner)
 
 Combines arrays by searching for intersections and adding them to the master array. Keys are combined using a delimiter.
 
